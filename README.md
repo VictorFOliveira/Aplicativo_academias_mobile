@@ -3,6 +3,24 @@
 Plataforma para gestão de academias de judô, jiu-jitsu e outras modalidades. Cada academia administra seus alunos e suas cobranças e oferece um portal com sua própria identidade visual.
 
 
+## Cadastro inicial disponível nesta versão
+
+O fluxo Flutter em `apps/mobile` cria a academia pela API, salva plano, vencimento, meio de pagamento e identidade visual, e confirma o e-mail do responsável por código. Os valores são calculados no servidor a R$ 30 no mensal e R$ 324 no anual. O backend conserva a solicitação pendente quando o envio por e-mail falha e permite reenviar o código. A primeira fatura fica em `PENDING_PAYMENT` até a etapa de integração com o Asaas.
+
+A API em `apps/api` parte da fundação do repositório `dojo-tigre-fight-web-access`, revisão `e592c69`. As migrações preparam um banco dedicado para o aplicativo.
+
+```sh
+cp .env.example .env
+# Preencha os dados SMTP e ONBOARDING_FROM antes de iniciar.
+docker compose up -d --build
+
+cd apps/mobile
+flutter pub get
+flutter run --dart-define=API_BASE_URL=http://10.0.2.2:8080
+```
+
+O exemplo Flutter usa um emulador Android e API na máquina local. Em aparelho físico use o endereço HTTPS de homologação. Confirme o estado da API em `/actuator/health`. O primeiro vencimento aceita datas dentro dos próximos 30 dias no horário de Fortaleza. São aceitos logos PNG ou JPEG de até 2 MB. Configure as credenciais de produção, o SMTP e o proxy HTTPS na VPS antes do piloto.
+
 ## Experiência por perfil
 
 Um único aplicativo Flutter atende todas as academias e apresenta as telas conforme as permissões do usuário. O backend e o banco central rodam na VPS.
