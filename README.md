@@ -2,37 +2,43 @@
 
 Plataforma para gestão de academias de judô, jiu-jitsu e outras modalidades. Cada academia administra seus alunos e suas cobranças e oferece um portal com sua própria identidade visual.
 
+
 ## Experiência por perfil
 
-| Perfil | Onde entra | O que faz |
+Um único aplicativo Flutter atende todas as academias e apresenta as telas conforme as permissões do usuário. O backend e o banco central rodam na VPS.
+
+| Perfil | Como começa | O que faz no app |
 |---|---|---|
-| Dono ou administrador | Painel web responsivo | Configura a academia, convida professores, define permissões, cadastra ou importa alunos, conecta o Asaas e acompanha as mensalidades. |
-| Professor | Mesmo painel, com permissões próprias | Gerencia turmas, horários, alunos e graduações conforme as permissões concedidas pela academia. |
-| Aluno ou responsável | Portal da academia pelo celular | Ativa a conta, entra com CPF e senha, consulta agenda, graduação e mensalidades e abre a fatura para pagar. |
-| Administrador da plataforma | Área administrativa da Cactus | Gerencia cadastro de academias, plano, período de avaliação e status da assinatura. Acesso de suporte deve ser restrito e auditado. |
+| Dono da academia | Toca em **Cadastrar minha academia**, confirma o contato e cria a conta | Cadastra a academia, define nome, logo e cor, convida professores, configura modalidades e planos, cadastra ou importa alunos, conecta o Asaas e acompanha a assinatura da plataforma. |
+| Professor | Aceita o convite da academia e define a senha | Gerencia turmas, horários, graduações e alunos de acordo com as permissões. Pode convidar alunos quando autorizado. |
+| Aluno ou responsável | Abre o convite no app ou digita o código recebido | Confirma o cadastro e define a senha. Nos acessos seguintes, entra com CPF e senha no contexto da academia. Consulta agenda, graduação e mensalidades. |
+| Administrador da plataforma | Acessa a área restrita da Cactus | Gerencia academias, plano, período de avaliação e status da assinatura. O acesso de suporte é restrito e auditado. |
 
-A primeira versão terá um painel web para a equipe e um portal instalável pelo navegador para alunos. Ambos usam a mesma API. O portal pode ter nome, logotipo, ícone, cor principal e endereço próprios por academia. Modalidades, planos, horários, carência e dias de vencimento são configurações da academia. O endereço define a academia e a API confirma se a sessão pertence a ela.
+O cadastro da academia, a ativação de contas e a gestão do dojô acontecem no aplicativo desde o piloto. O dono pode compartilhar o convite pelo WhatsApp ou copiar o código para enviar por outro canal. O link abre o app quando instalado. Quem ainda precisa instalar recebe instruções e pode usar o código na tela **Tenho um convite** depois da instalação.
 
-A etapa seguinte pode oferecer um único aplicativo Flutter para alunos, com seleção da academia e personalização carregada pela API. O ícone da loja e o nome da listagem pertencem ao aplicativo publicado. A marca de cada academia aparece dentro dele. Um app exclusivo por cliente fica condicionado a escopo comercial e revisão das regras de publicação das lojas.
+O convite tem validade, é de uso único e está vinculado à academia, ao perfil e ao cadastro que o originou. A equipe pode reenviar ou revogar convites pendentes. Um aluno adulto e um responsável podem acessar a conta com o próprio CPF. O responsável pode ter mais de um aluno vinculado.
+
+Nome, logotipo e cor são exibidos no convite e nas telas da academia. A listagem e o ícone principal na loja identificam o Cactus Fight. O servidor valida a academia da sessão em cada operação.
+
 
 ## Produto mínimo para o piloto
 
-1. Criar uma academia e personalizar a página de entrada com nome, cor e logotipo.
-2. Cadastrar, editar, ativar e inativar alunos. Vincular responsáveis, definir matrícula, modalidade, turma, faixa, mensalidade e vencimento.
+1. Permitir que o dono cadastre a academia, confirme seu contato e personalize nome, logo e cor pelo app.
+2. Cadastrar, editar, ativar e inativar alunos. Vincular responsáveis e definir matrícula, modalidade, turma, faixa, mensalidade e vencimento.
 3. Gerenciar professores, grade semanal e faixas por modalidade. Usar modelos iniciais de judô, jiu-jitsu e muay thai, com opções de edição pela academia.
-4. Mostrar no painel o total de alunos ativos e cobranças pagas, pendentes e vencidas. Permitir exportação de cadastros e financeiro por perfil autorizado.
-5. Conectar a conta Asaas da academia, testar a conexão e importar clientes ou vincular cadastros já existentes.
-6. Convidar o aluno ou responsável por link de uso único. Após definir a senha, permitir entrada por CPF no portal da academia. Exibir agenda, graduação, mensalidades e histórico.
-7. Permitir abrir a fatura do Asaas para pagamento e atualizar o status automaticamente. Confirmar pagamentos, cancelamentos e estornos com base no Asaas.
-8. Liberar o piloto com duas academias distintas para verificar isolamento, personalização e recuperação de acesso.
+4. Mostrar no app o total de alunos ativos e cobranças pagas, pendentes e vencidas. Permitir exportação de cadastros e do financeiro por perfil autorizado.
+5. Conectar a conta Asaas da academia no app, testar a conexão e importar clientes ou vincular cadastros já existentes. Permitir selecionar uma planilha pelo seletor de arquivos do celular.
+6. Convidar o aluno ou responsável no cadastro do aluno. Após aceitar o convite e definir a senha, o usuário entra com CPF e vê agenda, graduação, mensalidades e histórico.
+7. Oferecer pagamento das mensalidades pelo celular. Exibir Pix copia e cola e, quando disponível, a linha digitável do boleto. Confirmar pagamentos, cancelamentos e estornos com base no Asaas.
+8. Liberar o piloto para duas academias distintas e validar o fluxo a partir de um celular sem sessão anterior.
 
-Presença, avisos automáticos, aplicativo Flutter nas lojas, integração física com catracas e provedores como Wellhub e TotalPass entram no backlog. O painel deve identificar o status do aluno, da matrícula, da cobrança e da assinatura da academia de forma independente.
+Presença, avisos automáticos, integração física com catracas e provedores como Wellhub e TotalPass entram no backlog. O app distingue os estados do aluno, da matrícula, da cobrança e da assinatura da academia.
 
 ## Fluxo Asaas
 
 ### Conexão
 
-O dono ou um administrador autorizado fornece uma chave da conta Asaas da academia no painel. A API testa a integração, guarda a chave criptografada e apresenta apenas o status da conexão. Segredos de produção e sandbox são separados. A chave fica disponível exclusivamente ao backend, com possibilidade de rotação e registro de alterações.
+O dono ou um administrador autorizado fornece uma chave da conta Asaas da academia no aplicativo. A API testa a integração, guarda a chave criptografada e apresenta apenas o status da conexão. Segredos de produção e sandbox são separados. A chave fica disponível exclusivamente ao backend, com possibilidade de rotação e registro de alterações.
 
 ### Importação e vínculo
 
@@ -40,7 +46,7 @@ O dono ou um administrador autorizado fornece uma chave da conta Asaas da academ
 - **Por arquivo**: importar a planilha exportada do Asaas, com prévia, mapeamento de colunas e relatório de erros. Importar somente as linhas selecionadas e os dados necessários.
 - **Base do dojô piloto**: migrar alunos, turmas, faixas, professores e histórico a partir de uma exportação validada. Aproveitar os IDs Asaas existentes quando disponíveis. A migração reaproveita os cadastros e os vínculos financeiros e exclui credenciais e configurações secretas da base antiga.
 - **Conflitos**: dentro da academia, priorizar o ID Asaas já associado e usar CPF normalizado quando houver correspondência inequívoca. Se o CPF pertence a um responsável ligado a vários alunos, pedir revisão e vincular o pagador às matrículas corretas. Uma segunda importação deve atualizar os vínculos confirmados sem criar duplicatas.
-- **Portabilidade**: exportar alunos ativos ou todos os alunos, conforme o filtro do painel, e permitir exportação financeira com escopo próprio. Relatórios excluem senhas, tokens e credenciais de integração.
+- **Portabilidade**: exportar alunos ativos ou todos os alunos, conforme o filtro do aplicativo, e permitir exportação financeira com escopo próprio. Relatórios excluem senhas, tokens e credenciais de integração.
 
 Importar ou vincular um aluno preserva as cobranças existentes. A primeira importação mostra os registros encontrados e deixa a emissão de novas cobranças pendente de configuração explícita.
 
@@ -48,34 +54,34 @@ Importar ou vincular um aluno preserva as cobranças existentes. A primeira impo
 
 Quando a academia já tem recorrência no Asaas, o Cactus acompanha as cobranças geradas por aquela assinatura. Quando a academia optar por emitir mensalidades pelo Cactus, a API mantém uma cobrança por matrícula e competência, reaproveita IDs externos e concilia operações cujo retorno ficou incerto antes de repetir a emissão. O mesmo pagador pode ter mais de uma matrícula legítima.
 
-O portal oferece o link da cobrança existente para o aluno ou responsável pagar pelos meios habilitados na fatura. O webhook usa um token próprio por integração, distinto da chave da API. Os eventos são persistidos e processados uma vez por integração e identificador de evento. A API concilia periodicamente registros com o Asaas para recuperar notificações perdidas e preservar o estado correto em eventos repetidos ou fora de ordem. A academia recebe os valores na conta dela, sujeitos às condições do Asaas. A assinatura da plataforma é cobrada em um fluxo próprio da Cactus.
+O aplicativo exibe os dados de pagamento da cobrança existente, conforme os meios disponíveis. O aluno pode copiar o código Pix ou a linha digitável e concluir no aplicativo bancário. Cartão pela fatura hospedada do Asaas fica como evolução a homologar. O webhook usa um token próprio por integração, distinto da chave da API. Os eventos são persistidos e processados uma vez por integração e identificador de evento. A API concilia periodicamente registros com o Asaas para recuperar notificações perdidas e preservar o estado correto em eventos repetidos ou fora de ordem. A academia recebe os valores na conta dela, sujeitos às condições do Asaas. A assinatura da plataforma é cobrada em um fluxo próprio da Cactus.
+
 
 ## Arquitetura e implantação
 
 | Diretório proposto | Responsabilidade |
 |---|---|
 | `apps/api` | API Java 21 e Spring Boot, autenticação, regras por academia, Asaas e migrações do banco via Flyway. |
-| `apps/web` | Painel responsivo e portal instalável do aluno. |
-| `apps/mobile` | Aplicativo Flutter compartilhado na etapa de publicação. |
+| `apps/mobile` | App Flutter com cadastro da academia, área da equipe, área do aluno ou responsável e configuração do Asaas. |
 | `infra` | Docker Compose, roteiro de implantação, backups e verificação de recuperação. |
 
-O PostgreSQL é central e privado. Academias, alunos, responsáveis, matrículas, turmas, usuários, personalizações e cobranças têm escopo por academia. A autorização é aplicada no servidor, inclusive em buscas, exportações e links de faturas. Segredos, credenciais e dados reais de clientes ficam fora do Git. Senhas são armazenadas com hash apropriado. CPF é identificador, com mascaramento, proteção em repouso e acesso limitado. O primeiro acesso e a recuperação usam contato verificado e link de curta duração. Turmas infantis podem usar conta do responsável vinculada a mais de um aluno.
+O PostgreSQL é central e privado. Academias, alunos, responsáveis, matrículas, turmas, usuários, personalizações e cobranças têm escopo por academia. A autorização é aplicada no servidor, inclusive em buscas, exportações e acesso às faturas. Segredos, credenciais e dados reais de clientes ficam fora do Git. Senhas são armazenadas com hash apropriado. CPF é identificador, com mascaramento, proteção em repouso e acesso limitado. O primeiro acesso e a recuperação usam convite ou código de curta duração e contato verificado.
 
-A primeira hospedagem pode usar uma VPS Linux com Docker Compose, proxy reverso HTTPS, rede privada para o banco, backup externo e monitoramento. O piloto depende de verificar CPU, memória, disco e carga atuais e validar restauração do banco. A distribuição do app nas lojas é independente de onde a API roda. Se houver migração para a nuvem, serviços como Cloud Run e Cloud SQL podem hospedar a aplicação e o banco.
+A implantação inicial está prevista na VPS `cactus-main`, com Docker Compose, Caddy para HTTPS, rede privada para o PostgreSQL, backup externo e monitoramento. Antes do piloto, verificar CPU, memória, disco, carga dos serviços existentes e restauração do banco. O app se comunica por HTTPS com a API. A Google Play distribui o app Android e o TestFlight pode ser usado em um piloto iOS, se incluído no escopo.
+
 
 ## Ordem de entrega
 
 | Etapa | Critério de conclusão |
 |---|---|
-| 1. Fundação e identidade visual | Cada academia tem nome, marca, endereço e sessão próprios. Testes mostram que duas academias ficam isoladas, inclusive por URL direta e exportação. |
-| 2. Gestão do dojô | Administrador e professor operam alunos, matrículas, faixas, turmas e grade semanal com as permissões previstas. A base piloto é importada e conferida. |
-| 3. Financeiro e portal | Aluno ou responsável ativa a conta por convite, entra com CPF, vê a fatura e faz um pagamento de teste. Reimportar e reenviar o webhook preservam os registros existentes. |
-| 4. Piloto comercial | Piloto com o dojô de referência e uma segunda academia, backups restaurados em teste, documentação de onboarding e suporte e assinatura da plataforma validada. |
-| 5. Publicação nas lojas | Após validar o uso do portal, decidir se o Flutter traz ganho de distribuição e publicar o app compartilhado com a experiência por academia. |
+| 1. Fundação e cadastro | O dono instala o app, confirma o contato, cria sua academia e personaliza a marca. Testes verificam que duas academias ficam isoladas. |
+| 2. Gestão e convite | A equipe opera alunos, matrículas, faixas, turmas e grade semanal. O professor autorizado cadastra e convida um aluno. O aluno ou responsável aceita no aplicativo e entra com CPF e senha. |
+| 3. Asaas e pagamentos | A academia conecta o Asaas e importa os alunos pelo app. O responsável ou aluno consulta e paga uma mensalidade de teste. Reimportação e reentrega do webhook preservam os registros existentes. |
+| 4. Piloto comercial | O dojô de referência e uma segunda academia completam o fluxo pelo celular. O backup é restaurado em teste e a contratação do plano é validada para o canal de distribuição escolhido. |
 
 ## Preço inicial para validar
 
-R$ 30 por mês por unidade é a hipótese comercial do piloto. A cobrança cobre o acesso ao software. As taxas de recebimento das mensalidades são as da conta Asaas de cada academia. Antes de fixar o preço definitivo, medir tempo de implantação, volume de suporte por cliente e custo mensal de infraestrutura. Em uma simulação, 10 academias pagantes representam R$ 300 brutos mensais e 50 representam R$ 1.500 brutos mensais.
+R$ 30 por mês por unidade é a hipótese comercial do piloto. A cobrança cobre o acesso ao software. O cadastro inicial pode começar com período de avaliação configurável. A contratação paga do plano deve seguir a política aplicável ao canal de distribuição. O app mostra o estado da assinatura da própria academia. As taxas de recebimento das mensalidades são as da conta Asaas de cada academia. Antes de fixar o preço definitivo, medir tempo de implantação, volume de suporte por cliente e custo mensal de infraestrutura. Em uma simulação, 10 academias pagantes representam R$ 300 brutos mensais e 50 representam R$ 1.500 brutos mensais.
 
 ## Referências externas
 
